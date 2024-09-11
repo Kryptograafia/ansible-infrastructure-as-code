@@ -1,0 +1,3 @@
+- name: Install nginx web server
+  ansible.builtin.apt:
+    name: nginx

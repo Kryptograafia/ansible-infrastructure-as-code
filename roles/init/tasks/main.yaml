@@ -1,2 +1,30 @@
-- name: Ansible ping module
-  ansible.builtin.ping:
+#- name: Ansible ping module
+#  ansible.builtin.ping:
+
+#Limit the apt update to once a day
+
+- name: Update APT cache
+  ansible.builtin.apt:
+    cache_valid_time: 86400
+
+#Configure the users
+
+- name: Create user juri
+  ansible.builtin.user:
+    name: juri
+
+- name: Create user roman
+  ansible.builtin.user:
+    name: roman
+
+#Configure the ssh keys for remote access
+
+- name: Configure the ssh public key for juri
+  ansible.posix.authorized_key:
+    user: juri
+    key: https://github.com/hudolejev.keys
+
+- name: Configure the ssh public key for roman
+  ansible.posix.authorized_key:
+    user: roman
+    key: https://github.com/romankuchin.keys
