@@ -9,22 +9,22 @@
 
 #Configure the users
 
-- name: Create user juri
-  ansible.builtin.user:
-    name: juri
+#- name: Create user juri
+ # ansible.builtin.user:
+  #  name: juri
 
-- name: Create user roman
-  ansible.builtin.user:
-    name: roman
+#- name: Create user roman
+ # ansible.builtin.user:
+  #  name: roman
 
 #Configure the ssh keys for remote access
 
-- name: Configure the ssh public key for juri
-  ansible.posix.authorized_key:
-    user: juri
-    key: https://github.com/hudolejev.keys
+#- name: Configure the ssh public key for juri
+ # ansible.posix.authorized_key:
+  #  user: juri
+   # key: https://github.com/hudolejev.keys
 
-- name: Configure the ssh public key for roman
-  ansible.posix.authorized_key:
-    user: roman
-    key: https://github.com/romankuchin.keys
+#- name: Configure the ssh public key for roman
+ # ansible.posix.authorized_key:
+  #  user: roman
+   # key: https://github.com/romankuchin.keys

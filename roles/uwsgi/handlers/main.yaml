@@ -1,0 +1,4 @@
+- name: Restart uWSGI if there is a configuration change
+  ansible.builtin.service:
+    name: uwsgi
+    state: restarted

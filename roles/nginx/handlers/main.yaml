@@ -1,0 +1,4 @@
+- name: Restart Nginx if configuration changes
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

@@ -1,3 +1,15 @@
 - name: Install nginx web server
   ansible.builtin.apt:
     name: nginx
+
+- name: Copy default file to managed host
+  ansible.builtin.copy:
+    src: default
+    dest: /etc/nginx/sites-enabled/default
+  notify: Restart Nginx if configuration changes
+
+- name: Ensure Nginx service is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
