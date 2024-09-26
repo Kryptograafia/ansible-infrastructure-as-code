@@ -6,6 +6,7 @@
   ansible.builtin.copy:
     src: default
     dest: /etc/nginx/sites-enabled/default
+    validate: nginx -t -c %s
   notify: Restart Nginx if configuration changes
 
 - name: Ensure Nginx service is started and enabled
