@@ -1,0 +1,49 @@
+- name: Install Bind9 service
+  ansible.builtin.apt:
+    name: bind9
+    state: present
+
+- name: Stop and disable systemd-resolved service
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+
+- name: Copy the bind DNS named and local configuration to VM2
+  ansible.builtin.template:
+    src: named.conf.{{ item }}.j2
+    dest: /etc/bind/named.conf.{{ item }}
+  loop:
+    - options
+    - local
+  notify: Restart bind if there is a configuration change
+
+- name: Create master zone file and copy it to VM2
+  ansible.builtin.template:
+    src: db.kryptograafia.io.j2
+    dest: /var/cache/bind/db.{{ startup_name }}
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: Reload DNS zone file
+
+- name: Ensure Bind9 is started and enabled
+  ansible.builtin.service:
+    name: bind9
+    state: started
+    enabled: yes
+
+- name: Update the resolv file
+  ansible.builtin.template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['all'] }}"
+  run_once: true
+
+#- name: Update the resolv file
+ # ansible.builtin.template:
+  #  hosts: Kryptograafia-1
+   # src: resolv.conf.j2
+    #dest: /etc/resolv.conf
+  #notify: Restart bind if there is a configuration change

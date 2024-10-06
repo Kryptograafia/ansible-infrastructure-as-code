@@ -1,0 +1,11 @@
+$TTL 604800
+{{ startup_domain }}.   IN  SOA ns.{{ startup_domain }}. admin.{{ startup_domain }}. (
+            3         ; Serial
+       604800         ; Refresh
+        86400         ; Retry
+      2419200         ; Expire
+       604800 )       ; Negative Cache TTL
+
+{{ startup_domain }}.       IN  NS  Kryptograafia-2.{{ startup_domain }}.
+Kryptograafia-1   IN  A   {{ hostvars['Kryptograafia-1']['ansible_default_ipv4']['address'] }}
+Kryptograafia-2   IN  A   {{ hostvars['Kryptograafia-2']['ansible_default_ipv4']['address'] }}

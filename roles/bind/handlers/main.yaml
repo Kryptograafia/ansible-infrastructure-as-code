@@ -1,0 +1,7 @@
+- name: Restart bind if there is a configuration change
+  ansible.builtin.service:
+    name: bind9
+    state: restarted
+
+- name: Reload DNS zone file
+  ansible.builtin.command: rndc reload {{ startup_domain }}

@@ -1,8 +1,11 @@
-Kryptograafia-1 ansible_host=193.40.156.67 ansible_port=29422 ansible_user=ubuntu
-Kryptograafia-2 ansible_host=193.40.156.67 ansible_port=40222 ansible_user=ubuntu
+Kryptograafia-1 ansible_host=193.40.156.67 ansible_port=41222 ansible_user=ubuntu
+Kryptograafia-2 ansible_host=193.40.156.67 ansible_port=34222 ansible_user=ubuntu
 
 [web_servers]
 Kryptograafia-1
 
 [db_servers]
+Kryptograafia-2
+
+[bind_servers]
 Kryptograafia-2

@@ -1,0 +1,4 @@
+zone "{{ startup_domain }}" {
+   type master;
+   file "/var/cache/bind/db.{{ startup_name }}";
+};

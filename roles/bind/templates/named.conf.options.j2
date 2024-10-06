@@ -1,0 +1,15 @@
+options {
+    directory "/var/cache/bind";
+
+    forwarders {
+        {% for forwarder in dns_forwarders %}
+        {{ forwarder }};
+        {% endfor %}
+    };
+    
+    dnssec-validation no;
+    allow-query {
+        {{ allowed_network }};
+        {{ localhost_network }};
+    };
+};

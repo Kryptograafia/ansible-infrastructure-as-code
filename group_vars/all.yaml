@@ -1,4 +1,4 @@
-mysql_host: 192.168.43.146
+mysql_host: Kryptograafia-2
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -8,3 +8,11 @@ mysql_password: !vault |
           34613164613133353962313139643932373532333839323733373939323639636434393833393530
           3631383861383630640a343164313638396332626331376131626462353666303035323537656539
           33353234613861646261396436353733633939636539633164666434373133396230
+dns_forwarders:
+  - 1.1.1.1
+  - 8.8.8.8
+  - 9.9.9.9
+allowed_network: 192.168.42.0/23
+localhost_network: 127.0.0.0/8
+startup_domain: kryptograafia.io
+startup_name: kryptograafia

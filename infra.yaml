@@ -15,3 +15,8 @@
       - agama
       - uwsgi
       - nginx
+
+  - name: Bind9 server
+    hosts: bind_servers
+    roles:
+      - bind
