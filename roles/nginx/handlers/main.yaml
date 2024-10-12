@@ -2,3 +2,8 @@
   ansible.builtin.service:
     name: nginx
     state: restarted
+
+- name: Restart Nginx for prometheus if configuration changes
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

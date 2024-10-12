@@ -1,0 +1,4 @@
+- name: Restart prometheus if the configuration file is changed
+  ansible.builtin.service:
+    name: prometheus
+    state: restarted

@@ -1,0 +1,5 @@
+# Query for memory consumption in bytes for each VM
+node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+
+# Query for average CPU load for each VM (over the last 5 minutes)
+avg_over_time(node_load1[5m])

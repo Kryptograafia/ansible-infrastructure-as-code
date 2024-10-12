@@ -20,3 +20,9 @@
     hosts: bind_servers
     roles:
       - bind
+
+  - name: Prometheus server
+    hosts: prometheus_servers
+    roles:
+      - prometheus
+      - nginx
