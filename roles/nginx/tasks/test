@@ -1,0 +1,40 @@
+- name: Install nginx web server
+  ansible.builtin.apt:
+    name: nginx
+
+- name: Install Nginx exporter
+  ansible.builtin.apt:
+    name: prometheus-nginx-exporter
+    state: present
+
+- name: Copy default file to managed host
+  ansible.builtin.copy:
+    src: default
+    dest: /etc/nginx/sites-enabled/default
+    #validate: 'nginx -t -c %s'
+  notify:
+     - Reload Nginx Exporter if configuration changes
+     - Restart Nginx if configuration changes
+  when: inventory_hostname not in groups['prometheus_servers'] #maybe should change to when in group agama
+
+- name: Copy prometheus default file to managed host
+  ansible.builtin.template:
+    src: prometheus_default.j2
+    dest: /etc/nginx/sites-enabled/default
+    #validate: 'nginx -t -c %s'
+  notify:
+     - Restart Nginx for prometheus if configuration changes
+     - Reload Nginx Exporter if configuration changes
+  when: inventory_hostname in groups['prometheus_servers'] #Ensure this gets executed only if the host is serv. prom.
+
+- name: Ensure Nginx service is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Ensure Nginx Exporter is started and enabled
+  ansible.builtin.service:
+    name: prometheus-nginx-exporter
+    state: started
+    enabled: yes

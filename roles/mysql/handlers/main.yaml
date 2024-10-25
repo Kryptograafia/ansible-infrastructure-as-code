@@ -2,3 +2,8 @@
   ansible.builtin.service:
     name: mysql
     state: restarted
+
+- name: Restart MySQL exporter if authentication data changes
+  ansible.builtin.systemd:
+    name: prometheus-mysqld-exporter
+    state: restarted

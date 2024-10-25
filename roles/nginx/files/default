@@ -6,4 +6,16 @@ server {
         uwsgi_pass 127.0.0.1:5000;
         include uwsgi_params;
     }
+    
+    location = /basic_status {
+        stub_status;
+    }
+}
+
+server {
+    listen 8080 default_server;
+
+    location = /stub_status {
+        stub_status;
+    }
 }

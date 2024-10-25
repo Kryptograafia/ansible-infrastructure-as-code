@@ -7,3 +7,8 @@
   ansible.builtin.service:
     name: nginx
     state: restarted
+
+- name: Reload Nginx Exporter if configuration changes
+  ansible.builtin.systemd:
+    name: prometheus-nginx-exporter
+    state: reloaded

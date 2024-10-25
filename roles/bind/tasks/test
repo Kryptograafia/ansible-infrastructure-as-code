@@ -13,9 +13,6 @@
   ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['all'] }}"
-  run_once: true
 
 - name: Ensure Bind9 is started and enabled
   ansible.builtin.service:
