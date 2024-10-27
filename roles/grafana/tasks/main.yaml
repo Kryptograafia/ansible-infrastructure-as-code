@@ -12,3 +12,35 @@
   ansible.builtin.apt:
     name: grafana
     state: latest
+
+- name: Copy the grafana.ini file to remote host
+  ansible.builtin.template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+  become: yes
+  notify: Restart Grafana if configuration changes
+
+- name: Enable and start Grafana service
+  ansible.builtin.service:
+    name: grafana-server
+    enabled: true
+    state: started
+
+#Precreating the dashboard and user for grafana
+- name: Copy datasource.yaml
+  ansible.builtin.template:
+    src: datasource.yaml.j2
+    dest: /etc/grafana/provisioning/datasources/datasource.yaml
+  notify: Restart Grafana if configuration changes
+
+- name: Copy dashboard.json
+  ansible.builtin.copy:
+    src: main.json
+    dest: /etc/grafana/provisioning/dashboards/
+  notify: Restart Grafana if configuration changes
+
+- name: Copy dashboard.yaml
+  ansible.builtin.template:
+    src: dashboard.yaml.j2
+    dest: /etc/grafana/provisioning/dashboards/dashboard.yaml
+  notify: Restart Grafana if configuration changes

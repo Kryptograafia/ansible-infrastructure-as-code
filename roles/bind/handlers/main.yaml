@@ -5,3 +5,6 @@
 
 - name: Reload DNS zone file
   ansible.builtin.command: rndc reload {{ startup_domain }}
+
+- name: Reload systemd to apply changes
+  ansible.builtin.command: systemctl daemon-reload

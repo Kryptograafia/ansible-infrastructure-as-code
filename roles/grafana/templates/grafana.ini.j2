@@ -1,0 +1,9 @@
+[server]
+root_url = http://193.40.156.67:{{ (hostvars["Kryptograafia-1"]["ansible_port"] | string)[:-2]  + "80" }}/grafana/
+serve_from_sub_path = true
+[security]
+# Default admin user
+admin_user = Kryptograafia
+# Default admin password
+admin_password = {{ grafana_admin_password }}
+

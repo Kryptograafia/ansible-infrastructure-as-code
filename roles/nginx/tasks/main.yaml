@@ -27,6 +27,9 @@
     - Restart Nginx for prometheus if configuration changes
   when: inventory_hostname in groups['prometheus_servers'] # Ensure this gets executed only if the host serves Prometheus
 
+- name: Flush handlers to restart Nginx now
+  ansible.builtin.meta: flush_handlers
+
 - name: Install Nginx exporter
   ansible.builtin.apt:
     name: prometheus-nginx-exporter
