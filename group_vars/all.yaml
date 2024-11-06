@@ -27,12 +27,14 @@ prometheus_jobs:
   - linux
   - bind9
   - mysql
+  #- influxdb
   #- nginx
 instance: Value
 prometheus_job_ports:
   linux: '9100'
   bind9: '9119'
   mysql: '9104'
+  #influxdb: '9424'
   #nginx: '9113'
 
 dns_forwarders:

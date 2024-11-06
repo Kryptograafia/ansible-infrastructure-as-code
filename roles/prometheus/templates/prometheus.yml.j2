@@ -57,3 +57,7 @@ scrape_configs:
           - '{{ host }}:9113'
         {% endfor %}
         
+  - job_name: 'influxdb'
+    static_configs:
+      - targets:
+        - 'Kryptograafia-1:9424'

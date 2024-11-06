@@ -7,11 +7,29 @@
   ansible.builtin.apt:
     cache_valid_time: 86400
 
+- name: Install fping
+  ansible.builtin.apt:
+    name: fping
+    state: present
+  become: true
+
 - name: Install Prometheus node exporter on all VM-s
   ansible.builtin.apt:
     name: prometheus-node-exporter
     state: present
 
+- name: Configure rsyslog.conf file
+  ansible.builtin.template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  notify: Restart rsyslog
+
+- name: Configure rsyslog to send logs to Telegraf
+  ansible.builtin.copy:
+    src: 50-telegraf.conf
+    dest: /etc/rsyslog.d/50-telegraf.conf
+  notify: Restart rsyslog
+#"*.* @127.0.0.1:1514"
 #Configure the users
 
 #- name: Create user juri

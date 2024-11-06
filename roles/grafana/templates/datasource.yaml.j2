@@ -7,4 +7,22 @@ datasources:
     isDefault: true
     jsonData:
       httpMethod: POST
+    uid: ce21fsmtgpp8gc
 
+  - name: influxdb:agama_client_db
+    type: influxdb
+    url: http://Kryptograafia-1:8086
+    access: proxy
+    isDefault: false
+    database: agama_client_db
+    jsonData:
+      httpMethod: POST
+
+  - name: influxdb:telegraf
+    type: influxdb
+    url: http://Kryptograafia-1:8086
+    access: proxy
+    isDefault: false
+    database: telegraf
+    jsonData:
+      httpMethod: POST

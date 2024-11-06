@@ -21,6 +21,16 @@
     roles:
       - bind
 
+  - name: IndluxDB servers
+    hosts: influxdb_servers
+    roles:
+      - influxdb
+
+  - name: agama-client servers
+    hosts: agama-client_servers
+    roles:
+      - agama-client
+
   - name: Prometheus server
     hosts: prometheus_servers
     roles:

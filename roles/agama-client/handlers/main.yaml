@@ -1,0 +1,7 @@
+- name: Reload systemd manager configuration
+  ansible.builtin.command: systemctl daemon-reload
+
+- name: Restart agama-client.service if there are changes in config
+  ansible.builtin.service:
+    name: agama-client.service
+    state: restarted

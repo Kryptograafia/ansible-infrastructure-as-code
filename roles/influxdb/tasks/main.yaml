@@ -1,0 +1,79 @@
+- name: Add InfluxData GPG key
+  ansible.builtin.apt_key:
+    url: https://repos.influxdata.com/influxdata-archive_compat.key
+    state: present
+
+- name: Add InfluxDB repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://repos.influxdata.com/debian stable main"
+    state: present
+
+- name: Install InfluxDB
+  ansible.builtin.apt:
+    name: influxdb
+    state: present
+
+- name: Start and enable InfluxDB service
+  ansible.builtin.service:
+    name: influxdb
+    state: started
+    enabled: yes
+
+- name: Copy influxdb.conf
+  ansible.builtin.template:
+    src: influxdb.conf.j2
+    dest: /etc/influxdb/influxdb.conf.j2
+  notify: Restart InfluxDB
+
+- name: Download InfluxDB stats exporter
+  ansible.builtin.get_url:
+    url: "https://github.com/carlpett/influxdb_stats_exporter/releases/download/v0.1.1/influx_stats_exporter_linux_amd64"
+    dest: /usr/local/bin/influxdb_stats_exporter
+    mode: '0755'
+
+- name: Create systemd service for InfluxDB stats exporter
+  ansible.builtin.template:
+    src: prometheus-influxdb-stats-exporter.service.j2
+    dest: /etc/systemd/system/prometheus-influxdb-stats-exporter.service
+    mode: '0755'
+  notify: Reload systemd
+
+- name: Set ownership for InfluxDB stats exporter binary
+  ansible.builtin.file:
+    path: /usr/local/bin/influxdb_stats_exporter
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+
+- name: Enable and start InfluxDB stats exporter service
+  ansible.builtin.systemd:
+    name: prometheus-influxdb-stats-exporter
+    enabled: true
+    state: started
+
+- name: Install Telegraf
+  ansible.builtin.apt:
+    name: telegraf
+    state: present
+
+- name: Copy Telegraf configuration
+  ansible.builtin.template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+  notify: Restart Telegraf
+#    cmd: "sudo telegraf config create --section-filter 'inputs:outputs' --input-filter 'syslog' --output-filter 'influxdb' | sudo tee /etc/telegraf/telegraf.conf"
+
+#- name: Create syslog database in InfluxDB
+  #ansible.builtin.uri:
+    #url: "http://Kryptograafia-1:8086/query"
+    #method: POST
+   # body_format: form-urlencoded
+  #  body:
+ #     q: "CREATE DATABASE syslog"
+#    return_content: yes
+
+- name: Start and enable Telegraf service
+  ansible.builtin.service:
+    name: telegraf
+    state: started
+    enabled: yes

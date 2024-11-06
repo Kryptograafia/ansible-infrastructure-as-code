@@ -33,9 +33,15 @@
     dest: /etc/grafana/provisioning/datasources/datasource.yaml
   notify: Restart Grafana if configuration changes
 
-- name: Copy dashboard.json
+- name: Copy main.json
   ansible.builtin.copy:
     src: main.json
+    dest: /etc/grafana/provisioning/dashboards/
+  notify: Restart Grafana if configuration changes
+
+- name: Copy syslog.json
+  ansible.builtin.copy:
+    src: syslog.json
     dest: /etc/grafana/provisioning/dashboards/
   notify: Restart Grafana if configuration changes
 
