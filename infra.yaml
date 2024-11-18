@@ -29,7 +29,7 @@
   - name: agama-client servers
     hosts: agama-client_servers
     roles:
-      - agama-client
+      - agama_client
 
   - name: Prometheus server
     hosts: prometheus_servers

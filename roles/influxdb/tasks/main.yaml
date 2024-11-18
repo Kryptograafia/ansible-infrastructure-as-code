@@ -77,3 +77,38 @@
     name: telegraf
     state: started
     enabled: yes
+
+- name: Ensure /home/backup/influxdb directory exists
+  ansible.builtin.file:
+    path: /home/backup/influxdb
+    state: directory
+    owner: backup
+    group: backup
+    mode: '0755'
+
+- name: Create cron job for InfluxDB backup
+  ansible.builtin.cron:
+    name: "InfluxDB backup"
+    minute: "24"
+    hour: "21"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    user: "backup"
+    job: "rm -rf /home/backup/influxdb/*; influxd backup -portable -db telegraf /home/backup/influxdb"
+    cron_file: "/etc/cron.d/influxdb-backup"
+    state: present
+
+- name: Add Duplicity full backup job
+  ansible.builtin.lineinfile:
+    path: "/etc/cron.d/influxdb-backup"
+    regexp: "^.*duplicity.*full.*$"
+    line: "25 21 * * * backup duplicity --no-encryption full /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
+    state: present
+
+- name: Add Duplicity incremental backup job
+  ansible.builtin.lineinfile:
+    path: "/etc/cron.d/influxdb-backup"
+    regexp: "^.*duplicity.*incremental.*$"
+    line: "26 21 * * * backup duplicity --no-encryption incremental /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
+    state: present

@@ -66,4 +66,6 @@
     owner: bind
     group: bind
     mode: '0644'
-  notify: Reload DNS zone file
+  notify:
+    -  Reload DNS zone file
+    -  Restart bind if there is a configuration change

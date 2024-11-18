@@ -49,6 +49,67 @@
   notify: Restart MySQL exporter if authentication data changes
   no_log: true
 
+- name: Ensure /home/backup/mysql directory exists
+  ansible.builtin.file:
+    path: /home/backup/mysql/
+    state: directory
+    owner: backup
+    group: backup
+    mode: '0775'
+
+- name: Ensure backup user
+  community.mysql.mysql_user:
+    name: "backup"
+    #password: {{ mysql_backup_password }}
+    host: "%"
+    priv: "agama.*:LOCK TABLES,SELECT"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Ensure MySQL client configuration for backup user is set up
+  ansible.builtin.template:
+    src: .my.cnf-backup.j2
+    dest: /home/backup/.my.cnf
+    owner: backup
+    group: backup
+    mode: '0600'
+
+#- name: Ensure MySQL backup Cron job is scheduled
+ # ansible.builtin.template:
+  #  src: mysql-backup.j2
+   # dest: /etc/cron.d/mysql-backup
+    #owner: root
+    #group: root
+    #mode: '0744'
+
+- name: Create cron job for MySQL backup
+  ansible.builtin.cron:
+    name: "MySQL backup"
+    minute: "48"
+    hour: "19"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    user: "backup"
+    job: "mysqldump agama > /home/backup/mysql/agama.sql"
+    cron_file: "/etc/cron.d/mysql-backup"
+    state: present
+
+
+- name: Add Duplicity full backup job
+  ansible.builtin.lineinfile:
+    path: "/etc/cron.d/mysql-backup"
+    regexp: "^.*duplicity.*full.*$"
+    line: "49 19 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    state: present
+
+- name: Add Duplicity incremental backup job
+  ansible.builtin.lineinfile:
+    path: "/etc/cron.d/mysql-backup"
+    regexp: "^.*duplicity.*incremental.*$"
+    line: "49 19 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    state: present
+
 - name: Install the MySQL exporter
   ansible.builtin.apt:
     name: prometheus-mysqld-exporter
