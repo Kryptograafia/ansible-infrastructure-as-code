@@ -10,7 +10,7 @@ We back up services that satisfy at least one of these criteria:
 Services that are backed up:
  - InxfluxDB
  - MySQL
- - Grafana
+# - Grafana
 
 
 ## Schedule
@@ -25,7 +25,7 @@ All backups are started automatically by the backup automation service.
 
 Backup RPO (recovery point objective) is:
  - 24 hours for InfluxDB
- - 12 hours for MySQL
+ - 24 hours for MySQL
  - 24 hours for Grafana
 
 
@@ -33,27 +33,27 @@ Backup RPO (recovery point objective) is:
 
 MySQL and InfluxDB backups are uploaded to the backup server.
 
-Grafana is mirrored to the internal Git server.
+#Grafana is mirrored to the internal Git server.
 
 Backup data from both servers will be synchronized to encrypted AWS S3 bucket in future (work in progress).
 
 
 ## Retention
 
-InfluxDB backups are stored for 30 days; _____ versions (recovery points) are available to restore.
+InfluxDB backups are stored for 30 days; 2 versions (recovery points) are available to restore.
 
-MySQL backups are stored for 30 days; _____ versions are available to restore.
+MySQL backups are stored for 30 days; 2 versions are available to restore.
 
-Grafana backups are stored for 7 days; _____ versions are available to restore.
+Grafana backups are stored for 7 days; 2 versions are available to restore.
 
 
 ## Usability checks
 
-InfluxDB backups are verified every _____ by _____.
+InfluxDB backups are verified every day by Mark-Henry Jakobsoo.
 
-MySQL backups are verified every _____ by _____.
+MySQL backups are verified every day by Mark-Henry Jakobsoo.
 
-Grafana backups are verified every _____ by _____.
+Grafana backups are verified every day by Mark-Henry Jakobsoo.
 
 
 ## Restore process
@@ -62,7 +62,7 @@ Service is recovered from the backup in case of an incident, and when service ca
 
 RTO (recovery time objective) is:
  - 2 hours for InfluxDB
- - 3 hours for MySQL
+ - 2 hours for MySQL
  - 2 hours for Grafana
 
 Detailed backup restore procedure is documented in the [backup_restore.md](./backup_restore.md).

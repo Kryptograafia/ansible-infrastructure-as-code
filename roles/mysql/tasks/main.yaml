@@ -85,8 +85,8 @@
 - name: Create cron job for MySQL backup
   ansible.builtin.cron:
     name: "MySQL backup"
-    minute: "48"
-    hour: "19"
+    minute: "00"
+    hour: "00"
     day: "*"
     month: "*"
     weekday: "*"
@@ -100,14 +100,14 @@
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*full.*$"
-    line: "49 19 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    line: "1 00 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
     state: present
 
 - name: Add Duplicity incremental backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*incremental.*$"
-    line: "49 19 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    line: "1 00 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
     state: present
 
 - name: Install the MySQL exporter

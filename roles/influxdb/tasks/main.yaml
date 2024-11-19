@@ -89,8 +89,8 @@
 - name: Create cron job for InfluxDB backup
   ansible.builtin.cron:
     name: "InfluxDB backup"
-    minute: "24"
-    hour: "21"
+    minute: "3"
+    hour: "00"
     day: "*"
     month: "*"
     weekday: "*"
@@ -103,12 +103,12 @@
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/influxdb-backup"
     regexp: "^.*duplicity.*full.*$"
-    line: "25 21 * * * backup duplicity --no-encryption full /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
+    line: "4 00 * * * backup duplicity --no-encryption full /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
     state: present
 
 - name: Add Duplicity incremental backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/influxdb-backup"
     regexp: "^.*duplicity.*incremental.*$"
-    line: "26 21 * * * backup duplicity --no-encryption incremental /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
+    line: "5 00 * * * backup duplicity --no-encryption incremental /home/backup/influxdb/ rsync://Kryptograafia@backup.kryptograafia.io./influxdb"
     state: present
