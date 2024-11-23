@@ -10,7 +10,7 @@
 
 - name: Install InfluxDB
   ansible.builtin.apt:
-    name: influxdb
+    name: influxdb=1.8.10-1
     state: present
 
 - name: Start and enable InfluxDB service

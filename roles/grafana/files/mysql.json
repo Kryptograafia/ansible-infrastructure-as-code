@@ -105,7 +105,7 @@
         {
           "editorMode": "code",
           "expr": "mysql_slave_status_slave_io_running",
-          "legendFormat": "__auto",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         },
@@ -118,7 +118,7 @@
           "expr": "mysql_slave_status_slave_sql_running",
           "hide": false,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "B"
         }
@@ -210,7 +210,7 @@
         {
           "editorMode": "code",
           "expr": "mysql_global_variables_read_only",
-          "legendFormat": "__auto",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -274,7 +274,7 @@
         {
           "editorMode": "code",
           "expr": "mysql_global_variables_server_id",
-          "legendFormat": "{{ID}}",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         }
@@ -389,6 +389,6 @@
   "timezone": "browser",
   "title": "MySQL",
   "uid": "fe4t2zhmo6xogd",
-  "version": 5,
+  "version": 9,
   "weekStart": ""
 }

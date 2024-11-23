@@ -12,12 +12,6 @@
     state: started
     enabled: yes
 
-- name: Copy the override.cnf file to managed host
-  ansible.builtin.template:
-    src: override.conf.j2
-    dest: /etc/mysql/mysql.conf.d/override.cnf
-  notify: Restart MySQL if there is a configuration change
-
 - name: MySQL database
   community.mysql.mysql_db:
     name: "{{ mysql_database }}"
@@ -25,6 +19,7 @@
   notify:
     - Reset MySQL source
     - Reset MySQL replica
+
 
 - name: MySQL user
   community.mysql.mysql_user:
@@ -43,6 +38,12 @@
     login_unix_socket: /var/run/mysqld/mysqld.sock
     state: present
   no_log: true
+
+- name: Copy the override.cnf file to managed host
+  ansible.builtin.template:
+    src: override.conf.j2
+    dest: /etc/mysql/mysql.conf.d/override.cnf
+  notify: Restart MySQL if there is a configuration change
 
 - name: Create user for MySQL exporter
   community.mysql.mysql_user:
@@ -98,29 +99,30 @@
 - name: Create cron job for MySQL backup
   ansible.builtin.cron:
     name: "MySQL backup"
-    minute: "28"
-    hour: "19"
+    minute: "00"
+    hour: "00"
     day: "*"
     month: "*"
     weekday: "*"
     user: "backup"
     job: "mysqldump agama > /home/backup/mysql/agama.sql"
     cron_file: "/etc/cron.d/mysql-backup"
-    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
+    state: present
+
 
 - name: Add Duplicity full backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*full.*$"
-    line: "29 19 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
-    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
+    line: "1 00 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    state: present
 
 - name: Add Duplicity incremental backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*incremental.*$"
-    line: "30 19 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
-    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
+    line: "1 00 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
+    state: present
 
 - name: Install the MySQL exporter
   ansible.builtin.apt:

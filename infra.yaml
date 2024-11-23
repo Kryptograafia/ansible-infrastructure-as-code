@@ -8,6 +8,7 @@
     hosts: db_servers
     roles:
       - mysql
+    tags: mx
 
   - name: Web server
     hosts: web_servers
@@ -15,6 +16,7 @@
       - agama
       - uwsgi
       - nginx
+    tags: mx
 
   - name: Bind9 server
     hosts: bind_servers

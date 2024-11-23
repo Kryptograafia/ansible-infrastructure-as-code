@@ -20,9 +20,9 @@
 - name: Reset MySQL replica
   community.mysql.mysql_replication:
     mode: "{{ item.mode }}"
-    primary_host: "{{ mysql_host }}"
-    primary_user: "replication"
-    primary_password: "{{ mysql_replication_password }}"
+    source_host: "{{ mysql_host }}"
+    source_user: "replication_user"    # Replace with your replication user
+    source_password: "{{ mysql_replication_password }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   with_items:
     - { mode: stopreplica }
