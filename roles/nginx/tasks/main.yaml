@@ -10,8 +10,8 @@
     enabled: yes
 
 - name: Copy default file to managed host
-  ansible.builtin.copy:
-    src: default
+  ansible.builtin.template:
+    src: default.j2
     dest: /etc/nginx/sites-enabled/default
     #validate: 'nginx -t -c %s'
   notify:

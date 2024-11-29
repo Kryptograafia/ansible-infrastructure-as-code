@@ -4,6 +4,11 @@
     roles:
       - init
 
+  - name: Docker server
+    hosts: docker_servers
+    roles:
+      - docker
+
   - name: Database server
     hosts: db_servers
     roles:
@@ -14,7 +19,7 @@
     hosts: web_servers
     roles:
       - agama
-      - uwsgi
+      #- uwsgi
       - nginx
     tags: mx
 
@@ -42,4 +47,5 @@
   - name: Grafana servers
     hosts: grafana_servers
     roles:
+      - docker
       - grafana

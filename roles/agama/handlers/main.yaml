@@ -1,6 +1,5 @@
-- name: Restart Grafana Docker container
+- name: Restart agama Docker container
   community.docker.docker_container:
-    name: grafana
+    name: agama
     state: started
     restart: true
-
