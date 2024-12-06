@@ -4,29 +4,28 @@
     roles:
       - init
 
-  - name: Docker server
-    hosts: docker_servers
-    roles:
-      - docker
-
   - name: Database server
     hosts: db_servers
     roles:
       - mysql
     tags: mx
 
-  - name: Web server
-    hosts: web_servers
-    roles:
-      - agama
-      #- uwsgi
-      - nginx
-    tags: mx
-
   - name: Bind9 server
     hosts: bind_servers
     roles:
       - bind
+
+  - name: Docker server
+    hosts: docker_servers
+    roles:
+      - docker
+
+  - name: Web server
+    hosts: web_servers
+    roles:
+      - agama
+      - nginx
+    tags: mx
 
   - name: IndluxDB servers
     hosts: influxdb_servers
@@ -42,10 +41,20 @@
     hosts: prometheus_servers
     roles:
       - prometheus
-      - nginx
+      #- nginx this was on before lab 13
 
   - name: Grafana servers
     hosts: grafana_servers
     roles:
-      - docker
+      #- docker
       - grafana
+
+  - name: keepalived_servers
+    hosts: keepalived_servers
+    roles:
+      - keepalived
+
+  - name: HAProxy servers
+    hosts: haproxy_servers
+    roles:
+      - haproxy

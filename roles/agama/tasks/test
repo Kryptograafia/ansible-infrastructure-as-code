@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: /opt/agama
     state: directory
-    # mode: '0755'
+    #mode: '0755'
 
 - name: Download Agama and Dockerfile
   ansible.builtin.get_url:
@@ -21,26 +21,16 @@
       path: /opt/agama
     state: present
 
-- name: Run Agama containers
+- name: Run Agama container
   community.docker.docker_container:
-    name: "{{ ansible_hostname }}_agama_{{ item }}"
+    name: agama
     image: agama
     state: started
     restart_policy: always
     published_ports:
-      - "{{ agama_port | int + item | int - 1 }}:8000"
+      - "{{ agama_port }}:8000"
     env:
       AGAMA_DATABASE_URI: "mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}"
     volumes:
       - "/opt/agama:/opt/agama"
-  loop: "{{ range(1, agama_container_count | int + 1) | list }}"
   no_log: true
-
-#- name: Remove extra Agama containers
-  #community.docker.docker_container:
-    #name: "agama_{{ item }}"
-   # state: absent
-  #loop: "{{ range(agama_container_count | int + 1, max_existing_containers + 1) | list }}"
- # vars:
-#    max_existing_containers: "{{ lookup('community.docker.docker_containers', filters={'ancestor': 'agama'}) | length }}"
-

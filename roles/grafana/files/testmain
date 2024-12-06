@@ -18,166 +18,9 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 1,
   "links": [],
   "panels": [
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "ce21fsmtgpp8gc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 11,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "text": {
-          "titleSize": 12
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "haproxy_up",
-          "legendFormat": "Haproxy status {{instance}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "ce21fsmtgpp8gc"
-          },
-          "editorMode": "code",
-          "expr": "keepalived_up",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "Keepalived status {{instance}}",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "ce21fsmtgpp8gc"
-          },
-          "editorMode": "code",
-          "expr": "keepalived_vrrp_state",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "Keepalived vrrp state {{instance}}",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "title": "Haproxy and Keepalived status",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "ce21fsmtgpp8gc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "id": 10,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "max(haproxy_server_up{job=\"haproxy\"}) by (server)",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Haproxy server up for agama containers",
-      "type": "stat"
-    },
     {
       "datasource": {
         "type": "prometheus",
@@ -242,7 +85,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 0
       },
       "id": 9,
       "options": {
@@ -257,7 +100,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "editorMode": "code",
@@ -334,7 +177,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 8
       },
       "id": 8,
       "options": {
@@ -349,7 +192,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "editorMode": "code",
@@ -426,7 +269,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 16
       },
       "id": 7,
       "options": {
@@ -441,7 +284,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
@@ -505,7 +348,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -520,7 +364,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 24
       },
       "id": 6,
       "options": {
@@ -639,7 +483,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 32
       },
       "id": 5,
       "options": {
@@ -730,7 +574,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 40
       },
       "id": 4,
       "options": {
@@ -821,7 +665,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 48
       },
       "id": 3,
       "options": {
@@ -912,7 +756,7 @@
         "h": 6,
         "w": 11,
         "x": 0,
-        "y": 72
+        "y": 56
       },
       "id": 2,
       "options": {
@@ -1003,7 +847,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 78
+        "y": 62
       },
       "id": 1,
       "options": {
@@ -1043,13 +887,13 @@
     "list": []
   },
   "time": {
-    "from": "2024-12-05T08:38:27.262Z",
-    "to": "2024-12-06T08:38:27.262Z"
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Main dashboard",
   "uid": "ae2219102qbr4c",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
