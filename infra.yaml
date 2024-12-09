@@ -14,6 +14,7 @@
     hosts: bind_servers
     roles:
       - bind
+    tags: b
 
   - name: Docker server
     hosts: docker_servers

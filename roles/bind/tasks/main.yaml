@@ -16,6 +16,7 @@
   delegate_to: "{{ item }}"
   with_items: "{{ groups['all'] }}"
   run_once: true
+  notify: Restart bind if there is a configuration change
 
 - name: Ensure Bind9 is started and enabled
   ansible.builtin.service:
@@ -63,9 +64,11 @@
   ansible.builtin.template:
     src: db.kryptograafia.io.j2
     dest: /var/cache/bind/db.{{ startup_name }}
+    force: no
     owner: bind
     group: bind
     mode: '0644'
   notify:
     -  Reload DNS zone file
     -  Restart bind if there is a configuration change
+  when: inventory_hostname in groups['dns_primary']
