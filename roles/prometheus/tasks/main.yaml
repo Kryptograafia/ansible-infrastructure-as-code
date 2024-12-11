@@ -24,3 +24,8 @@
     dest: /etc/prometheus/prometheus.yml
   become: yes
   notify:  Restart prometheus if the configuration file is changed
+
+- include_role:
+      name: dns_record
+  vars:
+      dns_record: prometheus

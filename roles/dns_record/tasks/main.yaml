@@ -1,0 +1,11 @@
+- name: "Set CNAME record for {{ dns_record }} server"
+  community.general.nsupdate:
+    key_name: "nsupdate.key"
+    key_algorithm: "hmac-sha256"
+    key_secret: "{{ update_key_secret }}"
+    server: "{{ hostvars[groups['dns_primary'][0]]['ansible_default_ipv4']['address'] }}"
+    zone: "{{ startup_domain }}"
+    record: "{{ dns_record }}"
+    value: "{{ inventory_hostname }}"
+    type: "CNAME"
+  no_log: true

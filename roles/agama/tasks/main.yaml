@@ -44,3 +44,8 @@
  # vars:
 #    max_existing_containers: "{{ lookup('community.docker.docker_containers', filters={'ancestor': 'agama'}) | length }}"
 
+- include_role:
+      name: dns_record
+  vars:
+      dns_record:
+          "www{{ inventory_hostname | replace('Kryptograafia', '') }}"

@@ -78,3 +78,9 @@
     name: prometheus-keepalived-exporter
     state: started
     enabled: yes
+
+- include_role:
+      name: dns_record
+  vars:
+      dns_record:
+          "ka{{ inventory_hostname | replace('Kryptograafia', '') }}"
