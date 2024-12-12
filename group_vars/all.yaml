@@ -97,6 +97,15 @@ prometheus_jobs:
   #- influxdb
   #- nginx
   #- backup
+mysql_cname: db
+grafana_cname: grafana
+influxdb_cname: influxdb
+haproxy_cname: lb
+bind9_cname: ns
+prometheus_cname: prometheus
+agama_cname: www
+nginx_cname: nginx
+
 grafana_port: 3001
 agama_port: 8001
 prometheus_job_ports:

@@ -6,12 +6,6 @@
   ansible.builtin.apt:
     name: mysql-server
 
-- name: Ensure MySQL is started and enabled
-  ansible.builtin.service:
-    name: mysql
-    state: started
-    enabled: yes
-
 - name: Copy the override.cnf file to managed host
   ansible.builtin.template:
     src: override.conf.j2
@@ -34,6 +28,12 @@
     priv: "{{ mysql_database }}.*:ALL"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   no_log: true
+
+- name: Ensure MySQL is started and enabled
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
 
 - name: Create MySQL user for replication
   community.mysql.mysql_user:

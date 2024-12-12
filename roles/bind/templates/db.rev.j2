@@ -6,6 +6,7 @@ $TTL 604800
     2419200 ; Expire
      604800 ; Negative Cache TTL
 );
+
 {% for vm in groups['bind_servers'] %}
 168.192.in-addr.arpa. IN NS {{ vm }}.{{ startup_domain }};
 {% endfor %}

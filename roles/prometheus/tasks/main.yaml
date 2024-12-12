@@ -3,12 +3,6 @@
     name: prometheus
     state: present
 
-- name: Ensure Prometheus has started and is enabled
-  ansible.builtin.service:
-    name: prometheus
-    state: started
-    enabled: yes
-
 - name: Include public http endpoint to ARGS parameter in /etc/default/prometheus
   ansible.builtin.lineinfile:
     path: /etc/default/prometheus
@@ -24,6 +18,12 @@
     dest: /etc/prometheus/prometheus.yml
   become: yes
   notify:  Restart prometheus if the configuration file is changed
+
+- name: Ensure Prometheus has started and is enabled
+  ansible.builtin.service:
+    name: prometheus
+    state: started
+    enabled: yes
 
 - include_role:
       name: dns_record

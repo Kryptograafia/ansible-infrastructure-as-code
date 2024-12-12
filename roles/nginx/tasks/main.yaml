@@ -3,12 +3,6 @@
     name: nginx
     state: present
 
-- name: Ensure Nginx service is started and enabled
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: yes
-
 - name: Copy default file to managed host
   ansible.builtin.template:
     src: default.j2
@@ -34,6 +28,12 @@
   ansible.builtin.apt:
     name: prometheus-nginx-exporter
     state: present
+
+- name: Ensure Nginx service is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
 
 - name: Ensure Nginx Exporter is started and enabled
   ansible.builtin.service:

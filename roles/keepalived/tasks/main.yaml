@@ -5,12 +5,6 @@
     name: keepalived
     state: present
 
-- name: Ensure Keepalived is started and enabled
-  ansible.builtin.service:
-    name: keepalived
-    state: started
-    enabled: yes
-
 - name: Create keepalived_script user
   ansible.builtin.user:
     name: keepalived_script
@@ -31,6 +25,12 @@
     mode: '0750'
     owner: keepalived_script
     group: keepalived_script
+
+- name: Ensure Keepalived is started and enabled
+  ansible.builtin.service:
+    name: keepalived
+    state: started
+    enabled: yes
 
 - name: Download keepalived-exporter package from Github
   ansible.builtin.get_url:
