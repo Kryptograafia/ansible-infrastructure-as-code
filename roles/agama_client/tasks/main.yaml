@@ -27,3 +27,8 @@
     src: agama-client.conf.j2
     dest: /etc/agama-client/agama-client.conf
   notify: Restart agama-client.service if there are changes in config
+
+- include_role:
+    name: dns_record
+  vars:
+    dns_record: aclient

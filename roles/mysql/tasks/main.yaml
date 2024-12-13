@@ -137,7 +137,7 @@
 - name: Configure the replica server
   community.mysql.mysql_variables:
     variable: read_only
-    value: "{{ 'OFF' if inventory_hostname == mysql_host else 'ON' }}"
+    value: "{{ 'OFF' if inventory_hostname == groups['db_servers'][0] else 'ON' }}" #First value is primary
     mode: persist
     login_unix_socket: /var/run/mysqld/mysqld.sock
   notify:

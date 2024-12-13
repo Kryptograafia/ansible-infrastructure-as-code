@@ -1,17 +1,16 @@
 $TTL 604800
-{{ startup_domain }}   IN  SOA ns.{{ startup_domain }} admin.{{ startup_domain }} (
-            3         ; Serial
-       604800         ; Refresh
-        86400         ; Retry
-      2419200         ; Expire
-       604800         ; Negative Cache TTL
+{{ startup_domain }}. IN  SOA {{ groups['dns_primary'][0] }}.{{ startup_domain }}. Kryptograafia.{{ startup_domain }}. (
+            3 ; Serial
+       604800 ; Refresh
+        86400 ; Retry
+      2419200 ; Expire
+       604800 ; Negative Cache TTL
 )
-#{{ startup_domain }}       IN  NS  Kryptograafia-1.{{ startup_domain }}
-#{{ startup_domain }}       IN  NS  Kryptograafia-2.{{ startup_domain }}
-{% for vm in groups['bind_servers'] %}
-{{ startup_domain }} IN NS {{ vm }}.{{ startup_domain }}
-{% endfor %}
 
+{% for vm in groups['bind_servers'] %}
+{{ startup_domain }}. IN NS {{ vm }}.{{ startup_domain }}.
+{% endfor %}
 {% for host in groups['all'] %}
 {{ host }}   IN  A   {{ hostvars[host]['ansible_default_ipv4']['address'] }}
 {% endfor %}
+

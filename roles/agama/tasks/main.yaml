@@ -1,4 +1,18 @@
 ---
+
+- name: Register the number of all containers
+  command: docker ps -a -q
+  register: nr_of_containers
+  changed_when: false
+
+- name: Delete containers not in use
+  community.docker.docker_container:
+    name: "{{ ansible_hostname }}_agama_{{ item }}"
+    state: absent
+    force_kill: yes
+  loop: "{{ range(agama_container_count | int + 1, agama_container_count | int + 1 + (nr_of_containers.stdout_lines | length)) | list }}"
+  when: nr_of_containers.stdout_lines | length > agama_container_count
+
 - name: Create /opt/agama directory
   ansible.builtin.file:
     path: /opt/agama
@@ -35,14 +49,6 @@
       - "/opt/agama:/opt/agama"
   loop: "{{ range(1, agama_container_count | int + 1) | list }}"
   no_log: true
-
-#- name: Remove extra Agama containers
-  #community.docker.docker_container:
-    #name: "agama_{{ item }}"
-   # state: absent
-  #loop: "{{ range(agama_container_count | int + 1, max_existing_containers + 1) | list }}"
- # vars:
-#    max_existing_containers: "{{ lookup('community.docker.docker_containers', filters={'ancestor': 'agama'}) | length }}"
 
 - include_role:
       name: dns_record

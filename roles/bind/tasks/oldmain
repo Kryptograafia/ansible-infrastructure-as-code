@@ -3,6 +3,21 @@
     name: bind9
     state: present
 
+- name: Stop and disable systemd-resolved service
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+
+- name: Update the resolv file
+  ansible.builtin.template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['all'] }}"
+  run_once: true
+  notify: Restart bind if there is a configuration change
+
 - name: Copy the bind DNS named and local configuration to VM2
   ansible.builtin.template:
     src: named.conf.{{ item }}.j2
@@ -15,8 +30,8 @@
 - name: Create master zone file and copy it to VM2
   ansible.builtin.template:
     src: db.kryptograafia.io.j2
-    dest: /var/cache/bind/db.kryptograafia.io
-    force: no
+    dest: /var/cache/bind/db.{{ startup_name }}
+    #force: no
     owner: bind
     group: bind
     mode: '0644'
@@ -64,7 +79,7 @@
   notify: Reload systemd to apply changes
 
 #- name: Reload systemd to apply changes
- # ansible.builtin.command: systemctl daemon-reload
+#  ansible.builtin.command: systemctl daemon-reload
 
 - name: Start and enable Bind9 exporter service
   ansible.builtin.systemd:
@@ -81,7 +96,7 @@
     key_name: "nsupdate.key"
     key_algorithm: "hmac-sha256"
     key_secret: "{{ update_key_secret }}"
-    record: backup
+    record: backup #"backup.{{ startup_domain }}"
     type: A
     value: "{{ backup_server_ip }}"
     state: present
@@ -93,18 +108,3 @@
   vars:
       dns_record:
           "ns{{ inventory_hostname | replace('Kryptograafia', '') }}"
-
-- name: Stop and disable systemd-resolved service
-  ansible.builtin.systemd:
-    name: systemd-resolved
-    state: stopped
-    enabled: no
-
-- name: Update the resolv file
-  ansible.builtin.template:
-    src: resolv.conf.j2
-    dest: /etc/resolv.conf
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['all'] }}"
-  run_once: true
-  notify: Restart bind if there is a configuration change

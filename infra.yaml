@@ -3,6 +3,7 @@
     hosts: all
     roles:
       - init
+    tags: ini
 
   - name: Bind9 server
     hosts: bind_servers
@@ -14,7 +15,7 @@
     hosts: db_servers
     roles:
       - mysql
-    tags: mx
+    tags: db
 
   - name: Docker server
     hosts: docker_servers
@@ -27,7 +28,7 @@
     roles:
       - agama
       - nginx
-    tags: mx
+    tags: w
 
   - name: IndluxDB servers
     hosts: influxdb_servers
@@ -39,12 +40,14 @@
     hosts: agama-client_servers
     roles:
       - agama_client
+    tags: ac
 
   - name: Prometheus server
     hosts: prometheus_servers
     roles:
       - prometheus
       #- nginx this was on before lab 13
+    tags: p
 
   - name: Grafana servers
     hosts: grafana_servers
@@ -57,8 +60,10 @@
     hosts: keepalived_servers
     roles:
       - keepalived
+    tags: ka
 
   - name: HAProxy servers
     hosts: haproxy_servers
     roles:
       - haproxy
+    tags: ha

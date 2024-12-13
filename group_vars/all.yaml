@@ -1,4 +1,4 @@
-mysql_host: Kryptograafia-2
+mysql_host: "{{ groups['db_servers'][0] }}"
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -105,6 +105,7 @@ bind9_cname: ns
 prometheus_cname: prometheus
 agama_cname: www
 nginx_cname: nginx
+agama_client_cname: aclient
 
 grafana_port: 3001
 agama_port: 8001
@@ -123,6 +124,6 @@ dns_forwarders:
 docker_allowed_network: 172.17.0.0/16
 allowed_network: 192.168.42.0/23
 localhost_network: 127.0.0.0/8
-startup_domain: kryptograafia.io.
+startup_domain: kryptograafia.io
 startup_name: kryptograafia
 public_ip: 193.40.156.67

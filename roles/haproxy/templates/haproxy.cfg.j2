@@ -46,8 +46,8 @@ frontend my_ha_frontend
     default_backend my_ha_backend
 
 backend my_ha_backend
-{% for hostname in ['Kryptograafia-1', 'Kryptograafia-2'] %}
+{% for host in groups["agama_servers"] %}
 {% for i in range(1, agama_container_count + 1) %}
-    server {{ hostname }}_agama_{{ i }} {{ hostname }}:{{ agama_port | int + i - 1 }} check
+    server {{ host }}_agama_{{ i }} {{ host }}:{{ agama_port | int + i - 1 }} check
 {% endfor %}
 {% endfor %}

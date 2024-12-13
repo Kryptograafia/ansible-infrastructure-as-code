@@ -12,7 +12,7 @@ zone "{{ startup_domain }}" {
 {% endfor %}
    };
 {% endif %}
-   file "/var/cache/bind/db.{{ startup_name }}";
+   file "/var/cache/bind/db.{{ startup_domain }}";
 };
 
 zone "168.192.in-addr.arpa" {

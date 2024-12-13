@@ -1,34 +1,39 @@
 # Sample config for Prometheus.
 
 global:
-  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with this config.
   external_labels:
-    monitor: 'example'
+      monitor: 'example'
 
 # Alertmanager configuration
 alerting:
   alertmanagers:
-    - static_configs:
-        - targets: ['localhost:9093']
+  - static_configs:
+    - targets: ['localhost:9093']
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
   # - "first_rules.yml"
   # - "second_rules.yml"
 
-# Scrape configurations
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
+
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
     scrape_timeout: 5s
+
+    # metrics_path defaults to '/metrics', but change it to /prometheus/metrics
     metrics_path: '/prometheus/metrics'
     # scheme defaults to 'http'.
+
     static_configs:
       - targets: ['localhost:9090']
 
@@ -36,62 +41,61 @@ scrape_configs:
     # If prometheus-node-exporter is installed, grab stats about the local
     # machine by default.
     static_configs:
-      - targets:
-{% for host in groups['all'] %}
-          - '{{ host }}:9100'
-{% endfor %}
+      - targets: ['Kryptograafia-1:9100', 'Kryptograafia-2:9100']
 
-  - job_name: 'linux'
+{% for job in prometheus_jobs %}
+  - job_name: '{{ job }}'
     static_configs:
       - targets:
-          - 'localhost:9100'
+          - 'localhost:{{ prometheus_job_ports[job] }}'
+{% endfor %}
 
   - job_name: 'bind9'
     static_configs:
       - targets:
-{% for host in groups['bind_servers'] %}
-        - 'ns{{ host | replace("Kryptograafia", "") }}:9119'
-{% endfor %}
-    metrics_path: '/metrics'
+          {% for host in groups['bind_servers'] %}
+          - ns{{ host | replace('Kryptograafia', '') }}:9119
+          {% endfor %}
+      metrics_path: '/metrics'
 
   - job_name: 'nginx'
     static_configs:
       - targets:
-{% for host in groups['web_servers'] %}
-        - 'nginx{{ host | replace("Kryptograafia", "") }}:9113'
-{% endfor %}
-    metrics_path: '/metrics'
+          {% for host in groups['web_servers'] %}
+          - nginx{{ host | replace('Kryptograafia', '') }}:9113
+          {% endfor %}
+      metrics_path: '/metrics'
 
   - job_name: 'mysql'
     static_configs:
       - targets:
-{% for host in groups['db_servers'] %}
-        - 'db{{ host | replace("Kryptograafia", "") }}:9104'
-{% endfor %}
-    metrics_path: '/metrics'
+          {% for host in groups['db_servers'] %}
+          - db{{ host | replace('Kryptograafia', '') }}:9104
+          {% endfor %}
+      metrics_path: '/metrics'
 
   - job_name: 'influxdb'
     static_configs:
       - targets:
           - 'influxdb:9424'
-    metrics_path: '/metrics'
+      metrics_path: '/metrics'
 
   - job_name: 'backups'
     static_configs:
-      - targets: ['backup.kryptograafia.io:9111']
+      - targets: ['backup.kryptograafia.io.:9111']
 
   - job_name: 'haproxy'
     static_configs:
       - targets:
-{% for host in groups['haproxy_servers'] %}
-        - 'lb{{ host | replace("Kryptograafia", "") }}:9101'
-{% endfor %}
-    metrics_path: '/metrics'
+          {% for host in groups['haproxy_servers'] %}
+          - lb{{ host | replace('Kryptograafia', '') }}:9101
+          {% endfor %}
+      metrics_path: '/metrics'
 
   - job_name: 'keepalived'
     static_configs:
       - targets:
-{% for host in groups['keepalived_servers'] %}
-        - 'ka{{ host | replace("Kryptograafia", "") }}:9165'
-{% endfor %}
-    metrics_path: '/metrics'
+          {% for host in groups['keepalived_servers'] %}
+          - ka{{ host | replace('Kryptograafia', '') }}:9165
+          {% endfor %}
+      metrics_path: '/metrics'

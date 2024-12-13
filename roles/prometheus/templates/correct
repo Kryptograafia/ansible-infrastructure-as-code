@@ -36,10 +36,7 @@ scrape_configs:
     # If prometheus-node-exporter is installed, grab stats about the local
     # machine by default.
     static_configs:
-      - targets:
-{% for host in groups['all'] %}
-          - '{{ host }}:9100'
-{% endfor %}
+      - targets: ['Kryptograafia-1:9100', 'Kryptograafia-2:9100']
 
   - job_name: 'linux'
     static_configs:
