@@ -1,40 +1,44 @@
-Kryptograafia-1 ansible_host=193.40.156.67 ansible_port=5122 ansible_user=ubuntu
-Kryptograafia-2 ansible_host=193.40.156.67 ansible_port=15122 ansible_user=ubuntu
+Kryptograafia-1 ansible_host=193.40.156.67 ansible_port=45622 ansible_user=ubuntu
+Kryptograafia-2 ansible_host=193.40.156.67 ansible_port=37322 ansible_user=ubuntu
+Kryptograafia-3 ansible_host=193.40.156.67 ansible_port=44622 ansible_user=ubuntu
 
 [web_servers]
 Kryptograafia-1
 Kryptograafia-2
+Kryptograafia-3
 
 [db_servers]
-Kryptograafia-2
 Kryptograafia-1
+Kryptograafia-2
 
 [dns_primary]
-Kryptograafia-2
+Kryptograafia-3
 
 [dns_secondary]
 Kryptograafia-1
+Kryptograafia-2
 
+#prometheus exporters on 1 and 2
 [bind_servers:children]
 dns_primary
 dns_secondary
-#Kryptograafia-2
 
 [prometheus_servers]
-Kryptograafia-2
+Kryptograafia-3
 
 [docker_servers]
 Kryptograafia-1
 Kryptograafia-2
+Kryptograafia-3
 
 [grafana_servers]
-Kryptograafia-1
+Kryptograafia-3
 
 [influxdb_servers]
-Kryptograafia-1
+Kryptograafia-3
 
 [agama-client_servers]
-Kryptograafia-1
+Kryptograafia-3
 
 [agama_servers]
 Kryptograafia-1

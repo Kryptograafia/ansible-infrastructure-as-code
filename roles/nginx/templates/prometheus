@@ -3,7 +3,7 @@ server {
     server_name _;
 
     location /prometheus {
-        proxy_pass http://Kryptograafia-2:9090/prometheus;  # Prometheus default port
+        proxy_pass http://prometheus:9090/prometheus;  # Prometheus default port
     }
     
     location / {

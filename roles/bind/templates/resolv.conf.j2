@@ -1,4 +1,4 @@
 search {{ startup_domain }}
-{% for server in groups['dns_primary'] + groups['dns_secondary'] %}
+{% for server in groups['dns_secondary'] %}
 nameserver {{ hostvars[server]['ansible_default_ipv4']['address'] }}
 {% endfor %}

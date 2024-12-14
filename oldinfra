@@ -21,31 +21,14 @@
     hosts: docker_servers
     roles:
       - docker
-    tags: do
+    tags: d
 
-  - name: Agama servers
-    hosts: agama_servers
+  - name: Web server
+    hosts: web_servers
     roles:
       - agama
-    tags: a
-
-  - name: agama-client servers
-    hosts: agama-client_servers
-    roles:
-      - agama_client
-    tags: ac
-
-  - name: HAProxy servers
-    hosts: haproxy_servers
-    roles:
-      - haproxy
-    tags: h
-
-  - name: keepalived_servers
-    hosts: keepalived_servers
-    roles:
-      - keepalived
-    tags: k
+      - nginx
+    tags: w
 
   - name: IndluxDB servers
     hosts: influxdb_servers
@@ -53,20 +36,34 @@
       - influxdb
     tags: i
 
+  - name: agama-client servers
+    hosts: agama-client_servers
+    roles:
+      - agama_client
+    tags: ac
+
   - name: Prometheus server
     hosts: prometheus_servers
     roles:
       - prometheus
+      #- nginx this was on before lab 13
     tags: p
 
   - name: Grafana servers
     hosts: grafana_servers
     roles:
+      #- docker
       - grafana
     tags: g
 
-  - name: Web server
-    hosts: web_servers
+  - name: keepalived_servers
+    hosts: keepalived_servers
     roles:
-      - nginx
-    tags: w
+      - keepalived
+    tags: ka
+
+  - name: HAProxy servers
+    hosts: haproxy_servers
+    roles:
+      - haproxy
+    tags: ha

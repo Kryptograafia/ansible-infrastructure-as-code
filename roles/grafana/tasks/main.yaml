@@ -26,7 +26,7 @@
     - { src: datasource.yaml.j2, dest: /opt/grafana/provisioning/datasources/default.yaml }
     - { src: dashboard.yaml.j2, dest: /opt/grafana/provisioning/dashboards/default.yaml }
   notify: Restart Grafana Docker container
-  #no_log: true
+  no_log: true
 
 - name: Ensure Grafana configuration files exist
   ansible.builtin.copy:

@@ -10,16 +10,16 @@
     #validate: 'nginx -t -c %s'
   notify:
     - Restart Nginx if configuration changes
-  when: inventory_hostname not in groups['prometheus_servers'] # maybe should change to when in group agama
+  #when: inventory_hostname not in groups['prometheus_servers'] # maybe should change to when in group agama
 
-- name: Copy prometheus default file to managed host
-  ansible.builtin.template:
-    src: prometheus_default.j2
-    dest: /etc/nginx/sites-enabled/default
+#- name: Copy prometheus default file to managed host
+ # ansible.builtin.template:
+  #  src: prometheus_default.j2
+   # dest: /etc/nginx/sites-enabled/default
     #validate: 'nginx -t -c %s'
-  notify:
-    - Restart Nginx for prometheus if configuration changes
-  when: inventory_hostname in groups['prometheus_servers'] # Ensure this gets executed only if the host serves Prometheus
+  #notify:
+   # - Restart Nginx for prometheus if configuration changes
+  #when: inventory_hostname in groups['prometheus_servers'] # Ensure this gets executed only if the host serves Prometheus
 
 - name: Flush handlers to restart Nginx now
   ansible.builtin.meta: flush_handlers

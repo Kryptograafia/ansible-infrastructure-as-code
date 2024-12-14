@@ -6,7 +6,7 @@
 
 2.) Download the backup, run the command as the backup user (--force is used to overwrite the directory if there is already a backup in that directory)
 
-    sudo -u backup duplicity --no-encryption --force restore rsync://Kryptograafia@backup.kryptograafia.io./mysql /home/backup/restore/mysql
+    sudo -u backup duplicity --no-encryption --force restore rsync://Kryptograafia@backup.kryptograafia.io/mysql /home/backup/restore/mysql
 
 3.) Restore MySQL data from the downloaded backup as user root:
 

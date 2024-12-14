@@ -11,8 +11,9 @@
     - options
     - local
   notify: rndc sync #Restart bind if there is a configuration change
+  no_log: true
 
-- name: Create master zone file and copy it to VM2
+- name: Create master zone file and copy it to VM3
   ansible.builtin.template:
     src: db.kryptograafia.io.j2
     dest: /var/cache/bind/db.kryptograafia.io
@@ -87,6 +88,7 @@
     state: present
   run_once: true
   when: inventory_hostname in groups['dns_primary']
+  no_log: true
 
 - include_role:
       name: dns_record

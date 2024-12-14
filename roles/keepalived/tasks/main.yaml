@@ -17,6 +17,7 @@
     dest: /etc/keepalived/keepalived.conf
   notify:
     - Restart Keepalived service
+  no_log: true
 
 - name: Copy check_haproxy script
   ansible.builtin.copy:

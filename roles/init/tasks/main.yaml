@@ -50,6 +50,7 @@
     ssh_key_type: rsa
     ssh_key_bits: 2048
   become: true
+  no_log: true
 
 - name: Add backup server SSH key to known_hosts for user backup
   ansible.builtin.template:
@@ -59,6 +60,7 @@
     group: backup
     mode: '0644'
   become: true
+  no_log: true
 
 - name: Ensure /home/backup/restore directory exists
   ansible.builtin.file:
