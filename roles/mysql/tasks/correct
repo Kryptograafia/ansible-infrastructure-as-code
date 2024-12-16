@@ -12,6 +12,12 @@
     state: started
     enabled: yes
 
+- name: Copy the override.cnf file to managed host
+  ansible.builtin.template:
+    src: override.conf.j2
+    dest: /etc/mysql/mysql.conf.d/override.cnf
+  notify: Restart MySQL if there is a configuration change
+
 - name: MySQL database
   community.mysql.mysql_db:
     name: "{{ mysql_database }}"
@@ -20,7 +26,6 @@
     - Reset MySQL source
     - Reset MySQL replica
 
-
 - name: MySQL user
   community.mysql.mysql_user:
     name: "{{ mysql_user }}"
@@ -28,6 +33,13 @@
     host: "%"
     priv: "{{ mysql_database }}.*:ALL"
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+
+- name: Ensure MySQL is started and enabled
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
 
 - name: Create MySQL user for replication
   community.mysql.mysql_user:
@@ -39,12 +51,6 @@
     state: present
   no_log: true
 
-- name: Copy the override.cnf file to managed host
-  ansible.builtin.template:
-    src: override.conf.j2
-    dest: /etc/mysql/mysql.conf.d/override.cnf
-  notify: Restart MySQL if there is a configuration change
-
 - name: Create user for MySQL exporter
   community.mysql.mysql_user:
     name: "{{ mysql_exporter_user }}"
@@ -52,6 +58,7 @@
     priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
 
 - name: Copy my.cnf to remote host
   ansible.builtin.template:
@@ -69,16 +76,17 @@
     state: directory
     owner: backup
     group: backup
-    mode: '0775'
+    mode: '0755'
 
 - name: Ensure backup user
   community.mysql.mysql_user:
     name: "backup"
-    #password: {{ mysql_backup_password }}
+    password: "{{ mysql_backup_password }}"
     host: "%"
     priv: "agama.*:LOCK TABLES,SELECT"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
 
 - name: Ensure MySQL client configuration for backup user is set up
   ansible.builtin.template:
@@ -88,41 +96,32 @@
     group: backup
     mode: '0600'
 
-#- name: Ensure MySQL backup Cron job is scheduled
- # ansible.builtin.template:
-  #  src: mysql-backup.j2
-   # dest: /etc/cron.d/mysql-backup
-    #owner: root
-    #group: root
-    #mode: '0744'
-
 - name: Create cron job for MySQL backup
   ansible.builtin.cron:
     name: "MySQL backup"
-    minute: "00"
-    hour: "00"
+    minute: "45"
+    hour: "21"
     day: "*"
     month: "*"
     weekday: "*"
     user: "backup"
     job: "mysqldump agama > /home/backup/mysql/agama.sql"
     cron_file: "/etc/cron.d/mysql-backup"
-    state: present
-
+    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
 
 - name: Add Duplicity full backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*full.*$"
-    line: "1 00 * * * backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
-    state: present
+    line: "0 22 * * 0 backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io/mysql"
+    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
 
 - name: Add Duplicity incremental backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*incremental.*$"
-    line: "1 00 * * * backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io./mysql"
-    state: present
+    line: "0 22 * * 1-6 backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.kryptograafia.io/mysql"
+    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
 
 - name: Install the MySQL exporter
   ansible.builtin.apt:
@@ -138,9 +137,15 @@
 - name: Configure the replica server
   community.mysql.mysql_variables:
     variable: read_only
-    value: "{{ 'OFF' if inventory_hostname == mysql_host else 'ON' }}"
+    value: "{{ 'OFF' if inventory_hostname == groups['db_servers'][0] else 'ON' }}" #First value is primary
     mode: persist
     login_unix_socket: /var/run/mysqld/mysqld.sock
   notify:
     - Reset MySQL source
     - Reset MySQL replica
+
+- include_role:
+      name: dns_record
+  vars:
+      dns_record:
+          "db{{ inventory_hostname | replace('Kryptograafia', '') }}"

@@ -19,7 +19,11 @@ vrrp_instance VI_1 {
         {{ hostvars['Kryptograafia-1']['ansible_default_ipv4']['address'].split('.')[0] }}.{{ hostvars['Kryptograafia-1']['ansible_default_ipv4']['address'].split('.')[1] }}.{{ '100' if hostvars['Kryptograafia-1']['ansible_default_ipv4']['address'].split('.')[2] == '42' else '101' }}.{{ hostvars['Kryptograafia-1']['ansible_default_ipv4']['address'].split('.')[3] }}/24
     }
     unicast_peer {
-        {{ groups['all'] | difference([inventory_hostname]) | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join('\n        ') }}
+        {% for host in groups['keepalived_servers'] %}
+        {% if host != inventory_hostname %}
+        {{ hostvars[host]['ansible_default_ipv4']['address'] }}
+        {% endif %}
+        {% endfor %}
     }
     track_script {
         check_haproxy

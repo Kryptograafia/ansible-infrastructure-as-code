@@ -78,7 +78,7 @@ scrape_configs:
 
   - job_name: 'backups'
     static_configs:
-      - targets: ['backup.kryptograafia.io:9111']
+      - targets: ['backup.{{ startup_domain }}:9111']
     metrics_path: '/metrics'
 
   - job_name: 'haproxy'

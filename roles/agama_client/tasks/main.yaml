@@ -28,6 +28,12 @@
     dest: /etc/agama-client/agama-client.conf
   notify: Restart agama-client.service if there are changes in config
 
+- name: Ensure agama-client.service is started and enabled
+  ansible.builtin.service:
+    name: agama-client.service
+    state: started
+    enabled: true
+
 - include_role:
     name: dns_record
   vars:

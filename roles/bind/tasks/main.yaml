@@ -10,7 +10,9 @@
   loop:
     - options
     - local
-  notify: rndc sync #Restart bind if there is a configuration change
+  notify:
+     #- Restart bind if there is a configuration change
+     - rndc sync
   no_log: true
 
 - name: Create master zone file and copy it to VM3
@@ -49,11 +51,11 @@
 - name: Download Bind9 exporter
   ansible.builtin.get_url:
     url: https://github.com/prometheus-community/bind_exporter/releases/download/v0.6.1/bind_exporter-0.6.1.linux-amd64.tar.gz
-    dest: /tmp/bind_exporter.tar.gz  # Temporary destination on the managed host
+    dest: /opt/bind_exporter.tar.gz  # Temporary destination on the managed host
 
 - name: Install Bind9 exporter
   ansible.builtin.unarchive:
-    src: /tmp/bind_exporter.tar.gz
+    src: /opt/bind_exporter.tar.gz
     dest: /usr/local/bin/
     remote_src: yes
     extra_opts: [--strip-components=1]
