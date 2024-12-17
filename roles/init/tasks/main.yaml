@@ -28,6 +28,12 @@
     name: prometheus-node-exporter
     state: present
 
+- name: Ensure Prometheus Node Exporter service is enabled and started
+  ansible.builtin.systemd:
+    name: prometheus-node-exporter
+    enabled: true
+    state: started
+
 - name: Configure rsyslog.conf file
   ansible.builtin.template:
     src: rsyslog.conf.j2

@@ -77,7 +77,7 @@
   community.mysql.mysql_user:
     name: "backup"
     password: "{{ mysql_backup_password }}"
-    host: "%"
+    host: "localhost"
     priv: "agama.*:LOCK TABLES,SELECT"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -109,14 +109,14 @@
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*full.*$"
-    line: "0 22 * * 0 backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.{{ startup_domain }}/mysql"
+    line: "00 22 * * 0 backup duplicity --no-encryption full /home/backup/mysql/ rsync://Kryptograafia@backup.{{ startup_domain }}/mysql"
     state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
 
 - name: Add Duplicity incremental backup job
   ansible.builtin.lineinfile:
     path: "/etc/cron.d/mysql-backup"
     regexp: "^.*duplicity.*incremental.*$"
-    line: "0 22 * * 1-6 backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.{{ startup_domain }}/mysql"
+    line: "00 22 * * 1-6 backup duplicity --no-encryption incremental /home/backup/mysql/ rsync://Kryptograafia@backup.{{ startup_domain }}/mysql"
     state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
 
 - name: Install the MySQL exporter

@@ -1,4 +1,8 @@
-script_security 1
+global_defs {
+    enable_script_security
+    script_user keepalived_script
+}
+
 vrrp_script check_haproxy {
     script "/home/keepalived_script/check_haproxy.sh"
     weight 20

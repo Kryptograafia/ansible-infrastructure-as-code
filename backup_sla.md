@@ -9,12 +9,12 @@ We backup 2 services, where in each we backup 1 database:
 
 ## Schedule for backups
 
-- InfluxDB FULL backups are created every Sunday at 21:35 UTC
-- InfluxDB INCREMENTAL backups are created every day from Monday to Saturday at 21:35 UTC
+- InfluxDB FULL backups are created every Sunday at 21:15 UTC and uploaded at 21:35 UTC
+- InfluxDB INCREMENTAL backups are created every day from Monday to Saturday at 21:15 UTC and uploaded at 21:35 UTC
 It takes up to 2 hours to create and store the backup.
 
-- MySQL FULL backups are created every Sunday at 22:00 UTC
-- MySQL INCREMENTAL backups are created every day from Monday to Saturday at 22:00 UTC
+- MySQL FULL backups are created every Sunday at 21:45 UTC and uploaded at 22:00 UTC
+- MySQL INCREMENTAL backups are created every day from Monday to Saturday at 21:45 UTC and uploaded at 22:00 UTC
 It takes up to 2 hours to create and store the backup.
 
 #Backup RPO (recovery point objective) is:
