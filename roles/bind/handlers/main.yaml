@@ -3,8 +3,23 @@
     name: bind9
     state: restarted
 
-- name: rndc sync
-  ansible.builtin.command: rndc sync {{ startup_domain }}
+- name: Freeze zone
+  ansible.builtin.command:
+    cmd: rndc freeze {{ startup_domain }}
+  #listen: Freeze and reload the zone
+  when: inventory_hostname in groups['dns_primary']
+
+- name: Reload zone
+  ansible.builtin.command:
+    cmd: rndc reload {{ startup_domain }}
+  #listen: Freeze and reload the zone
+  when: inventory_hostname in groups['dns_primary']
+
+- name: Thaw zone
+  ansible.builtin.command:
+    cmd: rndc thaw {{ startup_domain }}
+  #listen: Freeze and reload the zone
+  when: inventory_hostname in groups['dns_primary']
 
 - name: Reload systemd to apply changes
   ansible.builtin.command: systemctl daemon-reload

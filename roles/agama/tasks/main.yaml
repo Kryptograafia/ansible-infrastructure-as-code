@@ -17,7 +17,6 @@
   ansible.builtin.file:
     path: /opt/agama
     state: directory
-    # mode: '0755'
 
 - name: Download Agama and Dockerfile
   ansible.builtin.get_url:

@@ -1,5 +1,5 @@
 [server]
-root_url = http://{{ public_ip }}:{{ (hostvars["Kryptograafia-1"]["ansible_port"] | string)[:-2]  + "80" }}/grafana/
+root_url = {{ public_url }}:{{ (hostvars["Kryptograafia-1"]["ansible_port"] | string)[:-2]  + "80" }}/grafana/
 serve_from_sub_path = true
 [security]
 # Default admin user

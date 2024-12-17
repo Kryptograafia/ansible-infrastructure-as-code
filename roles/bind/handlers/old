@@ -1,0 +1,13 @@
+- name: Restart bind if there is a configuration change
+  ansible.builtin.service:
+    name: bind9
+    state: restarted
+
+- name: rndc sync
+  ansible.builtin.command: rndc sync {{ startup_domain }}
+
+- name: rndc reload
+  ansible.builtin.command: rndc reload {{ startup_domain }}
+
+- name: Reload systemd to apply changes
+  ansible.builtin.command: systemctl daemon-reload

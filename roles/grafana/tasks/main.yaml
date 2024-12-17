@@ -61,3 +61,6 @@
     name: dns_record
   vars:
     dns_record: grafana
+    #dns_notify_handler:
+      #- Stop Grafana Docker container
+      #- Start Grafana Docker container #if domain name is changed, grafana cpntainer needs to be rebooted

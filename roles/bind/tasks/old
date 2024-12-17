@@ -11,39 +11,35 @@
     - options
     - local
   notify:
-     - Restart bind if there is a configuration change
+     #- Restart bind if there is a configuration change
+     - rndc sync
   no_log: true
 
 - name: Create master zone file and copy it to VM3
   ansible.builtin.template:
     src: db.kryptograafia.io.j2
-    dest: /var/cache/bind/db.{{ startup_domain }}
-    force: no #if you want to change the file, comment it out
+    dest: /var/cache/bind/db.kryptograafia.io
+    force: no
     owner: bind
     group: bind
     mode: '0644'
   notify:
-    - Freeze zone
-    - Reload zone
-    - Thaw zone
-    - Restart bind if there is a configuration change
+    #-  Reload DNS zone file
+    -  Restart bind if there is a configuration change
   when: inventory_hostname in groups['dns_primary']
 
-- name: Create reverse zone file
+- name: Create reverse zone file and copy it to VM2
   ansible.builtin.template:
     src: db.rev.j2
     dest: /var/cache/bind/db.rev
-    force: no #if you want to change the file, comment it out
+    force: no
     owner: bind
     group: bind
     mode: '0644'
   notify:
-    - Freeze zone
-    - Reload zone
-    - Thaw zone
-    - Restart bind if there is a configuration change
-
-- meta: flush_handlers
+    #-  Reload DNS zone file
+    -  Restart bind if there is a configuration change
+  when: inventory_hostname in groups['bind_servers']
 
 - name: Ensure Bind9 is started and enabled
   ansible.builtin.service:
@@ -55,7 +51,7 @@
 - name: Download Bind9 exporter
   ansible.builtin.get_url:
     url: https://github.com/prometheus-community/bind_exporter/releases/download/v0.6.1/bind_exporter-0.6.1.linux-amd64.tar.gz
-    dest: /opt/bind_exporter.tar.gz
+    dest: /opt/bind_exporter.tar.gz  # Temporary destination on the managed host
 
 - name: Install Bind9 exporter
   ansible.builtin.unarchive:
@@ -70,11 +66,16 @@
     dest: /etc/systemd/system/bind_exporter.service
   notify: Reload systemd to apply changes
 
+#- name: Reload systemd to apply changes
+ # ansible.builtin.command: systemctl daemon-reload
+
 - name: Start and enable Bind9 exporter service
   ansible.builtin.systemd:
     name: bind_exporter
     state: started
     enabled: yes
+
+- meta: flush_handlers
 
 - name: Add A record for backup server
   community.general.nsupdate:
@@ -92,10 +93,10 @@
   no_log: true
 
 - include_role:
-    name: dns_record
+      name: dns_record
   vars:
-    dns_record:
-      "ns{{ inventory_hostname | replace('Kryptograafia', '') }}"
+      dns_record:
+          "ns{{ inventory_hostname | replace('Kryptograafia', '') }}"
 
 - name: Stop and disable systemd-resolved service
   ansible.builtin.systemd:

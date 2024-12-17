@@ -7,7 +7,7 @@
   ansible.builtin.lineinfile:
     path: /etc/default/prometheus
     regexp: '^ARGS="'
-    line: 'ARGS="--web.external-url=http://193.40.156.67:{{ (hostvars["Kryptograafia-2"]["ansible_port"] | string)[:-2] + "80" }}/prometheus"'
+    line: 'ARGS="--web.external-url={{ public_url }}:{{ (hostvars["Kryptograafia-2"]["ansible_port"] | string)[:-2] + "80" }}/prometheus"'
     state: present
   notify:  Restart prometheus if the configuration file is changed
   become: yes

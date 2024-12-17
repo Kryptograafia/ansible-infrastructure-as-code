@@ -18,7 +18,7 @@
   notify:
     - Restart Keepalived service
   no_log: true
-  diff: true
+  #diff: true
 
 - name: Copy check_haproxy script
   ansible.builtin.copy:
